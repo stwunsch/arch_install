@@ -1,0 +1,10 @@
+# Arch linux install guide for system with LVM on top of LUKS
+
+This guide describes my linux setup. I use a not-encrypted boot partition and a
+second encrypted LUKS partition. The second partition holds a logical volume
+(LVM) for the linux system. The advantage is the (relatively) easy setup and
+even the filesystem is hidden from non-authorized users. This setup is often
+called LVM on top of LUKS.
+
+The guide ends with the setup of the productive user. Then, the standard
+Arch linux beginner's guides should be useful.

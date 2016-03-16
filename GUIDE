@@ -1,0 +1,87 @@
+1) Boot with Arch image on USB
+
+2) Generate filesystem with boot and LVM partition.
+# Check current file system! And you know, everything is lost.
+$ lsblk
+# One partition for boot (100M, type 8300, partition 1) and one for root (rest
+# of the device, type 8E00, partition 2).
+$ gdisk /dev/sdX
+$ mkfs.ext2 /dev/sdX1
+# You can change the encryption parameters! Check out the docs of cryptsetup
+# (or Arch wiki pages).
+$ cryptsetup luksFormat /dev/sdX2 -c aes-xts-plain64 -s 512 -i 5000
+
+3) Open the container and prepare the logical volumes
+$ cryptsetup open --type luks /dev/sdX2 lvm
+# Create physical volume:
+$ pvcreate /dev/mapper/lvm
+# Create the volume group arch:
+$ vgcreate arch /dev/mapper/lvm
+# Create the logical volumes:
+$ lvcreate -L 8G arch -n swap
+$ lvcreate -l 100%FREE arch -n root
+
+4) Format the volumes
+$ mkfs.ext4 /dev/mapper/arch-root
+$ mkswap /dev/mapper/arch-swap
+
+5) Mount volumes and turn on swap
+$ mount /dev/mapper/arch-root /mnt
+$ mkdir /mnt/boot
+$ mount /dev/sdX1 /mnt/boot
+$ swapon /dev/mapper/arch-swap
+
+6) Connect to the internet
+# Via wifi use wifi-menu, otherwise it should work out of the box
+$ wifi-menu
+
+7) Install the system
+# Additional packages for wifi-menu on the installed system (dialog and
+# wpa_supplicant) and some other stuff like vim, git and bash completion
+$ pacstrap /mnt base base-devel dialog wpa_supplicant bash-completion vim git htop
+
+8) Generate the file system table
+# Using UUIDs as identifier
+$ genfstab -U /mnt > /mnt/etc/fstab
+
+9) Go to the new systems shell using arch-chroot (Arch change root) and get device UUIDs
+# Device UUIDs are needed for the bootloader setup
+# Store the UUIDs on the new system:
+$ lsblk -f > /mnt/lsblk_out
+# Don't forget to delete them later!
+$ arch-chroot /mnt
+
+10) Basic system configuration
+# Set hostname
+echo myhost > /etc/hostname
+# Set language (locale) by outcommenting desired language
+$ vim /etc/locale.gen
+$ locale-gen
+# Set localtime
+ln -s /usr/share/zoneinfo/Europe/Berlin /etc/localtime
+# Set root password
+$ passwd
+
+11) Setup mkinitcpio for booting kernel with encryption step
+# Add 'encrypt' and 'lvm2' to HOOKS="..."
+$ vim /etc/mkinitcpio.conf
+# Setup new kernel configuration
+$ mkinitcpio -p linux
+
+12) Setup bootloader (syslinux)
+# Install bootloader and gptfdisk (needed of syslinux)
+$ pacman -S syslinux gptfdisk
+# Open syslinux config file and remember the file 'lsblk_out' with the UUIDs
+$ vim /boot/syslinux/syslinux.cfg
+# Set correct boot device and decryption during boot somewhere below the lines
+# '# boot sections follow' and 'LABEL arch':
+# APPEND root=/dev/mapper/arch-root cryptdevice=UUID=<UUID of /dev/sdX2>:lvm rw
+$ syslinux-install_update -iam
+
+13) Exit change root environment and reboot
+$ exit
+$ reboot
+# Login with root//<your password>
+
+14) Setup of the productive user
+# Use the Arch beginner guides!
