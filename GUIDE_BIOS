@@ -63,7 +63,7 @@ ln -s /usr/share/zoneinfo/Europe/Berlin /etc/localtime
 $ passwd
 
 11) Setup mkinitcpio for booting kernel with encryption step
-# Add 'encrypt' and 'lvm2' to HOOKS="..."
+# Add 'encrypt' and 'lvm2' to HOOKS=" ... encrypt lvm2 ... filesystems ... "
 $ vim /etc/mkinitcpio.conf
 # Setup new kernel configuration
 $ mkinitcpio -p linux
@@ -80,6 +80,7 @@ $ syslinux-install_update -iam
 
 13) Exit change root environment and reboot
 $ exit
+$ umount -R \mnt
 $ reboot
 # Login with root//<your password>
 

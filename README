@@ -8,3 +8,6 @@ called LVM on top of LUKS.
 
 The guide ends with the setup of the productive user. Then, the standard
 Arch linux beginner's guides should be useful.
+
+There are two guides which do basically the same but they differ in the use of
+BIOS or UEFI.
