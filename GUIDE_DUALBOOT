@@ -1,0 +1,5 @@
+For a dualboot with windows 10, you have to install windows in GPT/UEFI mode.
+Then, you simply install Arch using the GUIDE_UEFI guide, but you are not
+creating the EFI partition! You are just mounting the EFI partition created by
+windows in /boot. There are no other differences compared to a plain Arch Linux
+installation.

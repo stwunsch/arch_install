@@ -11,3 +11,5 @@ Arch linux beginner's guides should be useful.
 
 There are two guides which do basically the same but they differ in the use of
 BIOS or UEFI.
+
+The setup of a dualboot system with windows 10 in GPT/UEFI mode is described in the third file.
