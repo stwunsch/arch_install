@@ -1,1 +1,1 @@
-pacstrap /mnt base base-devel dialog wpa_supplicant bash-completion gvim git htop networkmanager acpid ntp dbus avahi xorg-server xorg-xinit xorg-utils xorg-server-utils
+pacstrap /mnt base base-devel dialog wpa_supplicant bash-completion gvim git htop networkmanager acpid ntp dbus avahi xorg-server xorg-xinit xorg-utils xorg-server-utils xf86-video-intel xf86-input-synaptics ttf-dejavu
