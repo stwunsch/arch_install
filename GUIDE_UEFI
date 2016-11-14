@@ -77,14 +77,14 @@ $ bootctl --path=/boot update
 # title   Arch Linux
 # linux   /vmlinuz-linux
 # initrd  /initramfs-linux.img
-# options cryptdevice=UUID=<UUID of /de/sdX2>:lvm root=/dev/mapper/arch-root rw
+# options cryptdevice=UUID=<UUID of /dev/sdX2>:lvm root=/dev/mapper/arch-root rw
 # File: /boot/loader/loader.conf:
 # default arch
 # timeout 1
 
 13) Exit change root environment and reboot
 $ exit
-$ umount -R \mnt
+$ umount -R /mnt
 $ reboot
 # Login with root//<your password>
 
